@@ -17,6 +17,10 @@ library(dplyr)
 library(glue)
 library(readr)
 
+# Read in the full survey design file
+# We'll use this in the server to create the choice questions
+design <- read_csv(here("data", "choice_questions.csv"))
+
 # Database setup --------------------------------------------------------------
 #
 # Details at: https://surveydown.org/docs/storing-data
@@ -42,6 +46,59 @@ db <- sd_db_connect(ignore = TRUE)
 
 ui <- sd_ui()
 
+# Helper functions ------------------------------------------------------------
+#
+# Function to create the question options based on design values
+#
+# CUSTOMIZE THIS FUNCTION FOR YOUR STUDY:
+#
+# - Replace the attributes (type, price, freshness) with your own product features
+# - Update the image display if needed (or remove if not using images)
+# - Modify the formatting/layout of each option as desired
+# - Modify the number of alternatives appropriately to your study (alt1, alt2, alt3)
+
+make_cbc_options <- function(df) {
+  # Extract each alternative
+  alt1 <- df |> filter(altID == 1)
+  alt2 <- df |> filter(altID == 2)
+  alt3 <- df |> filter(altID == 3)
+
+  # Define option values (these stay the same)
+  options <- c("option_1", "option_2", "option_3")
+
+  # Create option labels with attribute values
+  names(options) <- c(
+    glue(
+      "
+      **Option 1**<br>
+      <img src='{alt1$image}' width=100><br>
+      **Type**: {alt1$type}<br>
+      **Price**: $ {alt1$price} / lb<br>
+      **Freshness**: {alt1$freshness}
+    "
+    ),
+    glue(
+      "
+      **Option 2**<br>
+      <img src='{alt2$image}' width=100><br>
+      **Type**: {alt2$type}<br>
+      **Price**: $ {alt2$price} / lb<br>
+      **Freshness**: {alt2$freshness}
+    "
+    ),
+    glue(
+      "
+      **Option 3**<br>
+      <img src='{alt3$image}' width=100><br>
+      **Type**: {alt3$type}<br>
+      **Price**: $ {alt3$price} / lb<br>
+      **Freshness**: {alt3$freshness}
+    "
+    )
+  )
+  return(options)
+}
+
 # Server setup ----------------------------------------------------------------
 
 server <- function(input, output, session) {
@@ -49,60 +106,16 @@ server <- function(input, output, session) {
   completion_code <- sd_completion_code(10)
   sd_store_value(completion_code)
 
-  # Read in the full survey design file
-  design <- read_csv(here("data", "choice_questions.csv"))
-
   # Sample a random respondentID and store it directly as "respID"
   respondentID <- sample(design$respID, 1)
   sd_store_value(respondentID, "respID")
 
   # Filter for the rows for the chosen respondentID
   df <- design |>
-    filter(respID == respondentID) |>
-    # Paste on the "images/" path (images are stored in the "images" folder)
-    mutate(image = paste0("images/", image))
+    filter(respID == respondentID)
 
-  # Function to create the question labels based on design values
-  make_cbc_options <- function(df) {
-    alt1 <- df |> filter(altID == 1)
-    alt2 <- df |> filter(altID == 2)
-    alt3 <- df |> filter(altID == 3)
-
-    options <- c("option_1", "option_2", "option_3")
-
-    names(options) <- c(
-      glue(
-        "
-      **Option 1**<br>
-      <img src='{alt1$image}' width=100><br>
-      **Type**: {alt1$type}<br>
-      **Price**: $ {alt1$price} / lb<br>
-      **Freshness**: {alt1$freshness}
-    "
-      ),
-      glue(
-        "
-      **Option 2**<br>
-      <img src='{alt2$image}' width=100><br>
-      **Type**: {alt2$type}<br>
-      **Price**: $ {alt2$price} / lb<br>
-      **Freshness**: {alt2$freshness}
-    "
-      ),
-      glue(
-        "
-      **Option 3**<br>
-      <img src='{alt3$image}' width=100><br>
-      **Type**: {alt3$type}<br>
-      **Price**: $ {alt3$price} / lb<br>
-      **Freshness**: {alt3$freshness}
-    "
-      )
-    )
-    return(options)
-  }
-
-  # Create the options for each choice question
+  # Create the options for each choice question (using the helper function above)
+  # NOTE: This example contains 6 choice questions - update as needed for your study
   cbc1_options <- make_cbc_options(df |> filter(qID == 1))
   cbc2_options <- make_cbc_options(df |> filter(qID == 2))
   cbc3_options <- make_cbc_options(df |> filter(qID == 3))
@@ -110,9 +123,9 @@ server <- function(input, output, session) {
   cbc5_options <- make_cbc_options(df |> filter(qID == 5))
   cbc6_options <- make_cbc_options(df |> filter(qID == 6))
 
-  # Create each choice question - display these in your survey using sd_output()
+  # Create each choice question - display these in your survey.qmd using sd_output()
   # Example: sd_output('cbc_q1', type = 'question')
-
+  # NOTE: This example contains 6 choice questions - update as needed for your study
   sd_question(
     type = 'mc_buttons',
     id = 'cbc_q1',
