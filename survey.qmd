@@ -1,25 +1,24 @@
 ---
-# General Settings
-format: html
-echo: false
-warning: false
+# The YAML header specifies several settings for the survey but is not required.
+# A full list of settings can be found under _survey/settings.yml directory.
 
-# Theme Settings
-theme: default
-barposition: top
-footer-left: "Made with [surveydown](https://surveydown.org)"
-footer-right: '[<i class="bi bi-github"></i> Source Code](https://github.com/surveydown-dev/template_conjoint_buttons)'
+theme-settings:
+  theme: default
+  barposition: top
+  footer-left: "Made with [surveydown](https://surveydown.org)"
+  footer-right: '[<i class="bi bi-github"></i> Source Code](https://github.com/surveydown-dev/template_conjoint_buttons)'
 
-# Survey Settings
-use-cookies: true
-auto-scroll: false
-rate-survey: false
-system-language: en
-highlight-unanswered: true
-highlight-color: blue
-capture-metadata: true
-all-questions-required: false
-required-questions:
+survey-settings:
+  show-previous: true
+  use-cookies: true
+  auto-scroll: false
+  rate-survey: false
+  system-language: en
+  highlight-unanswered: true
+  highlight-color: blue
+  capture-metadata: true
+  all-questions-required: false
+  required-questions:
   - consent_age
   - consent_understand
   - screenout
@@ -42,10 +41,6 @@ In this version, the conjoint options are shown in buttons.
 :::
 
 This is a template of choice-based-conjoint survey. For this survey, we will ask you about your preferences for different types of apples.
-
-```{r}
-sd_next()
-```
 
 --- consent
 
@@ -75,8 +70,6 @@ sd_question(
     'No'  = 'no'
   )
 )
-
-sd_next()
 ```
 
 --- favorite_fruit
@@ -100,8 +93,6 @@ sd_question(
   id    = 'fav_fruit',
   label = "What is your favorite fruit?"
 )
-
-sd_next()
 ```
 
 --- screening
@@ -122,8 +113,6 @@ sd_question(
     'Red'  = 'red'
   )
 )
-
-sd_next()
 ```
 
 --- educational
@@ -159,10 +148,6 @@ Fuji | Gala | Honeycrisp | Pink Lady | Red Delicious
 <img src="images/fuji.jpg" width=100> | <img src="images/gala.jpg" width=100> | <img src="images/honeycrisp.jpg" width=100> | <img src="images/pinkLady.jpg" width=100> | <img src="images/redDelicious.jpg" width=100>
 
 </div>
-
-```{r}
-sd_next()
-```
 
 --- cbc_practice_page
 
@@ -206,8 +191,6 @@ sd_question(
   label  = "For example, if these were the only apples available, which would you choose?",
   option = apple_buttons_option
 )
-
-sd_next()
 ```
 
 --- cbc_intro
@@ -218,17 +201,12 @@ Great work!
 
 We will now show you 6 sets of choice questions starting on the next page.
 
-```{r}
-sd_next()
-```
-
 --- cbc_q1_page
 
 # Conjoint Question 1
 
 ```{r}
 sd_output("cbc_q1", type = "question")
-sd_next()
 ```
 
 --- cbc_q2_page
@@ -237,7 +215,6 @@ sd_next()
 
 ```{r}
 sd_output("cbc_q2", type = "question")
-sd_next()
 ```
 
 --- cbc_q3_page
@@ -246,7 +223,6 @@ sd_next()
 
 ```{r}
 sd_output("cbc_q3", type = "question")
-sd_next()
 ```
 
 --- cbc_q4_page
@@ -255,7 +231,6 @@ sd_next()
 
 ```{r}
 sd_output("cbc_q4", type = "question")
-sd_next()
 ```
 
 --- cbc_q5_page
@@ -264,7 +239,6 @@ sd_next()
 
 ```{r}
 sd_output("cbc_q5", type = "question")
-sd_next()
 ```
 
 --- cbc_q6_page
@@ -273,7 +247,6 @@ sd_next()
 
 ```{r}
 sd_output("cbc_q6", type = "question")
-sd_next()
 ```
 
 --- apple_knowledge
@@ -320,8 +293,6 @@ sd_question(
   ),
   width = "500px"
 )
-
-sd_next()
 ```
 
 --- demographics
@@ -431,8 +402,6 @@ sd_question(
   
   Your feedback will help us make future improvements :)"
 )
-
-sd_next()
 ```
 
 :::
@@ -458,7 +427,7 @@ sd_close()
 The survey is now finished. You may close the window.
 
 ```{r}
-sd_close()
+sd_close(show_previous = TRUE)
 ```
 
 --- end_screenout
@@ -470,5 +439,5 @@ Sorry, we wanted you to select the **red** button.
 The survey is now finished. You may close the window.
 
 ```{r}
-sd_close()
+sd_close(show_previous = TRUE)
 ```
