@@ -1,16 +1,12 @@
+# Template - Conjoint Buttons
+
 A conjoint survey template with options shown in buttons.
 
-### 🟢 Demo
+### See it in action
 
-Try the live survey: https://surveydown-conjoint-buttons.hf.space
-
-### 🎬 Walkthrough Recording
+Watch the **Walkthrough recording:**
 
 [![Walkthrough recording](video-thumbnail.png)](https://cdn.jsdelivr.net/gh/surveydown-dev/template_conjoint_buttons@main/video-recording.mp4)
-
-### Template page
-
-https://surveydown.org/templates/conjoint_buttons
 
 ### Create this template
 
@@ -23,6 +19,7 @@ surveydown::sd_create_survey(
 )
 ```
 
-### Documentation
+### Learn more
 
-[Start with a template](https://surveydown.org/docs/getting-started#start-with-a-template)
+- [Template page - Conjoint Buttons](https://surveydown.org/templates/conjoint_buttons)
+- [Document page - Start with a template](https://surveydown.org/docs/getting-started#start-with-a-template)
